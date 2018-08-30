@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "ejs": "^2.6.1",
+    "excel-export": "^0.5.1",
+    "express": "^4.16.3",
+    "express-session": "^1.15.6",
+    "formidable": "^1.2.1",
+    "mongodb": "^3.1.0-beta4",
+    "mongoose": "^5.1.2",
+    "node-xlsx": "^0.12.0",
+    "underscore": "^1.9.0",
+    "clean-webpack-plugin": "^0.1.16",
+    "css-loader": "^0.28.7",
+    "file-loader": "^0.11.2",
+    "html-webpack-plugin": "^2.30.1",
+    "style-loader": "^0.18.2",
+    "url-loader": "^0.5.9",
+    "webpack": "^3.5.5",
+    "webpack-dev-server": "^2.7.1"
+  }
+}

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/public/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/public/css/dashboard.css" rel="stylesheet">
+    <style type="text/css">
+        .tab-pane{
+            padding-top:20px;
+        }
+        .main .page-header {
+            margin-top: 0;
+            color: white;
+        }
+        @media (min-width: 768px){
+            .sidebar {
+                position: fixed;
+                top: 51px;
+                bottom: 0;
+                left: 0;
+                z-index: 1000;
+                display: block;
+                padding: 20px;
+                overflow-x: hidden;
+                overflow-y: auto;
+                background-color: rgb(0,0,0,0.5);
+                /* border-right: 1px solid #eee; */
+            }
+        }
+        a {
+            color: white;
+            text-decoration: none;
+        }
+        body{
+            background: url(/public/images/car.jpg);
+            background-size: cover;
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">汽车租赁系统</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">退出登录</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="/admin/">客户信息</a></li>
+                <li><a href="/admin/allqiche/">汽车类型</a></li>
+                <li><a href="/admin/ghlb/">归还登记</a></li>
+                <li><a href="/admin/tongji/">统计分析</a></li>
+                <li class="active"><a href="/admin/todosome/">添加数据</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header">车辆管理</h1>
+            <div class="bs-example bs-example-tabs">
+                <ul id="myTab" class="nav nav-tabs" role="tablist">
+                    <li role="presentation" class="active"><a href="#daoru"  role="tab" data-toggle="tab" aria-controls="home" aria-expanded="true">导入车辆数据</a></li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div role="tabpanel" class="tab-pane fade active in" id="daoru" aria-labelledby="home-tab">
+                        <!--导入学生数据-->
+                        <div class="alert alert-danger" role="alert">
+                            导入Excel表会导致车辆数据覆盖，请谨慎操作啊！
+                        </div>
+                        <p>
+                            请选择Excel文件，拓展名必须是xlsx文件。
+                        </p>
+                        <!--内嵌一个ifrmae，防止表单提交之后页面跑走了-->
+                        <iframe  frameborder="0" src="/admin/uploadform"></iframe>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="/public/js/jquery-1.12.3.min.js"></script>
+<script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+<script>
+
+</script>
+</html>

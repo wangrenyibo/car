@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>租车</title>
+    <style>
+        small{
+            color:white;
+        }
+        body{
+        }
+        .jumbotron{
+            background-color: transparent;
+        }
+        form{
+            background: rgba(255,255,255,.5);
+            padding:20px 20px 20px 0;
+        }
+        body{
+            background: url(/public/images/car.jpg);
+            background-size: cover;
+        }
+    </style>
+    <link rel="stylesheet" href="/public/css/bootstrap.min.css">
+</head>
+<body>
+<div class="container" style="padding-top:40px;">
+        <div class="jumbotron">
+            <h1 style="color: white">汽车租赁系统</h1>
+        </div>
+        <div class="form col-lg-6">
+            <form class="form-horizontal" role="form">
+                <div class="form-group">
+                    <label for="inputEmail3" class="col-sm-2 control-label">管理员</label>
+                    <div class="col-sm-10">
+                        <input type="text" id="username" class="form-control" >
+                        <small>请输入管理员用户名</small>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="inputPassword3" class="col-sm-2 control-label">密码</label>
+                    <div class="col-sm-10">
+                        <input type="password" id="password" class="form-control">
+                        <small>如果忘记了密码，请联系项目工程师。</small>
+                    </div>
+                </div>
+                <div class="alert alert-danger" role="alert" id="tip" style="display: none;">
+                </div>
+                <div class="form-group">
+                    <div class="col-sm-offset-2 col-sm-10">
+                        <button id="btn" type="button" class="btn btn-success">登录</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</body>
+<script type="text/javascript" src="/public/js/jquery-1.12.3.min.js"></script>
+<script>
+    $("#btn").click(function(){
+        $.post("/checklogin",{
+            "username" : $("#username").val(),
+            "password" : $("#password").val()
+        },function(data){
+            if(data.result == -1){
+                $("#tip").html("服务器错误，请稍后再试").show();
+            }else if(data.result == -2){
+                $("#tip").html("用户名不存在！").show();
+            }else if(data.result == -3){
+                $("#tip").html("密码错误！").show();
+            }else if(data.result == -4){
+                $("#tip").html("少点啥啊！哥！").show();
+            }else if(data.result == 1 && data.type == "student"){
+                //刷新当前页面
+                window.location.reload();
+            }else if(data.result == 1 && data.type == "admin"){
+                //前往/admin
+                window.location= "/admin";
+            }
+        });
+        $("input").focus(function(){
+            $("#tip").hide();
+        });
+    });
+</script>
+</html>
+

@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/public/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/public/css/dashboard.css" rel="stylesheet">
+    <!--jQuery dependencies-->
+    <link rel="stylesheet" href="/public/css/jquery-ui.css"/>
+    <link rel="stylesheet" href="/public/css/pqgrid.min.css"/>
+    <link rel="stylesheet" href="/public/themes/office/pqgrid.css"/>
+    <style type="text/css">
+        .main .page-header {
+            margin-top: 0;
+            color: white;
+        }
+        @media (min-width: 768px){
+            .sidebar {
+                position: fixed;
+                top: 51px;
+                bottom: 0;
+                left: 0;
+                z-index: 1000;
+                display: block;
+                padding: 20px;
+                overflow-x: hidden;
+                overflow-y: auto;
+                background-color: rgb(0,0,0,0.5);
+                /* border-right: 1px solid #eee; */
+            }
+        }
+        .ui-widget.ui-widget-content {
+            border: 1px solid #c5c5c5;
+            box-shadow: 10px 10px 18px;
+        }
+        a {
+            color: white;
+            text-decoration: none;
+        }
+        body{
+            background: url(/public/images/car.jpg);
+            background-size: cover;
+        }
+        .tab-pane{
+            padding-top:20px;
+        }
+    </style>
+</head>
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">汽车租赁系统</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="#">退出登录</a></li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="/admin/">客户信息</a></li>
+                <li><a href="/admin/allqiche/">汽车类型</a></li>
+                <li class="active"><a href="/admin/ghlb/">归还登记</a></li>
+                <li><a href="/admin/tongji/">统计分析</a></li>
+                <li><a href="/admin/todosome/">添加数据</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header">车辆归还管理</h1>
+            <section class="grid" style="width:1000px;">
+                <div id="grid" style="margin-top:20px;"></div>
+                <input type="button" value="归还所选" id="shanchubtn" class="btn btn-danger" style="float:right;" />
+            </section>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/javascript" src="/public/js/jquery-1.12.3.min.js"></script>
+<script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+<script src="/public/js/jquery-ui.min.js"></script>
+<script src="/public/js/pqgrid.min.js"></script>
+<script type="text/javascript" src="/public/js/underscore-min.js"></script>
+<script>
+    $("#shanchubtn").click(function(){
+        var amount = $("tr.pq-row-select").length / 2;
+        var boolean = confirm("你确定要还" + amount + "这辆车吗？");
+        window.location.reload();
+        if(!boolean){
+            return;
+        }
+        var needToDelete = [];
+        $("tr.pq-row-select").each(function(){
+            needToDelete.push($(this).find("td[pq-col-indx=0]").html());
+            needToDelete.push($(this).find("td[pq-col-indx=2]").html());
+        });
+        needToDelete = _.uniq(needToDelete);
+        // console.log(needToDelete);
+        console.log(needToDelete);
+        // for(var i=0;i<needToDelete.length/2;i++){
+        //     var zbr=[];
+        //     for(var j=i*2;j<(i+1)*2;j++){
+        //         zbr.push(needToDelete[j]);
+        //     }
+        //     console.log(zbr);
+        // }
+        $.post("/admin/guihuan",{
+            zong: JSON.stringify(needToDelete),
+        },function(data){
+            window.location.reload();
+        });
+    })
+
+</script>
+<script type="text/javascript">
+    refresh();
+    function refresh() {
+        $.get("/admin/allguihuan",{z:Math.random()}, function (data) {
+            var dataobj = data.results;
+            $("#grid").pqGrid({
+                width: 900,
+                height: 400,
+                title: "所有客户",
+                resizable: false,
+                draggable: false,
+                dataModel: {
+                    data: dataobj
+                },
+                pageModel: { type: "local", rPP: 4, strRpp: "{0}", strDisplay: "{0} to {1} of {2}" },
+                colModel: [
+                    {title: "租赁人", width: 100, dataType: "string", dataIndx: "name",editable:false},
+                    // {title: "电话", width: 150, dataType: "string", dataIndx: "phone"},
+                    {title: "租赁名称", width: 100, dataType: "string", dataIndx: "zuche"},
+                    {title: "租赁时长", width: 200, dataType: "string", dataIndx: "days"},
+                    {title: "每天价格", width: 150, dataType: "string", dataIndx: "jg"},
+                    {title: "应付金额", width: 200, dataType: "string", dataIndx: "qian"},
+                    { title: "", dataIndx: "state", width: 30, minWidth:30, align: "center", type:'checkBoxSelection', cls: 'ui-state-default', resizable: false, sortable:false }
+                ],
+                cellSave: function (event, ui) {
+                    console.log(ui);
+                    $.post("/admin/changekh", ui.rowData, function (data) {
+
+                    });
+                }
+            });
+        });
+    }
+</script>
+</html>

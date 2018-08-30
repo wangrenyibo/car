@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link href="/public/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/public/css/dashboard.css" rel="stylesheet">
+    <style type="text/css">
+        .main .page-header {
+            margin-top: 0;
+            color: white;
+        }
+        @media (min-width: 768px){
+            .sidebar {
+                position: fixed;
+                top: 51px;
+                bottom: 0;
+                left: 0;
+                z-index: 1000;
+                display: block;
+                padding: 20px;
+                overflow-x: hidden;
+                overflow-y: auto;
+                background-color: rgb(0,0,0,0.5);
+            }
+        }
+        a {
+            color: white;
+            text-decoration: none;
+        }
+        body{
+            background: url(/public/images/car.jpg);
+            background-size: cover;
+        }`
+        .tab-pane{
+            padding-top:20px;
+        }
+        #box img{
+            width: 200px;
+            height: 120px;
+        }
+        .sp1{
+            display: inline-block;
+            font-size: 18px;
+            color: white;
+            line-height: 78px;
+            font-weight: bold;
+        }
+        .sp2{
+            display: inline-block;
+            font-size: 30px;
+            color: greenyellow;
+            font-style: normal;
+            line-height: 30px;
+            margin-left: 15px;
+        }
+        .sp3{
+            display: inline-block;
+            font-size: 12px;
+            font-style: normal;
+            margin-top: 12px;
+            color: red;
+        }
+        #box div{
+            border-bottom: 1px solid #ccc;
+        }
+        .a1{
+            margin-top: 20px;
+            display: inline-block;
+            float: right;
+            width: 60px;
+            height: 40px;
+            text-align: center;
+            line-height: 40px;
+            border-radius: 3px;
+            font-size: 18px;
+            color: #fff;
+            cursor: pointer;
+            background-color: rgb(191, 211, 221);
+
+        }
+        .hezi{
+            position: relative;
+        }
+        .dask{
+            width: 81px;
+            height: 41px;
+            position: absolute;
+            top: 20px;
+            right: 0;
+            background-color: red;
+            text-align: center;
+            line-height: 41px;
+            font-size: 24px;
+            color: white;
+             /*display: none;*/
+        }
+    </style>
+</head>
+<body>
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">汽车租赁系统</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/">退出登录</a></li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li><a href="/admin/">客户信息</a></li>
+                <li class="active"><a href="/admin/allqiche/">汽车类型</a></li>
+                <li><a href="/admin/ghlb/">归还登记</a></li>
+                <li><a href="/admin/tongji/">统计分析</a></li>
+                <li><a href="/admin/todosome/">添加数据</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header">选择你要租的车</h1>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <div class="bs-example bs-example-tabs">
+                <ul class="nav nav-tabs" role="tablist" id="qubuche">
+                    <li role="presentation" class="active"><a href="#" aria-controls="home" role="tab" data-toggle="tab">捷豹</a></li>
+                    <li role="presentation"><a href="#" aria-controls="profile" role="tab" data-toggle="tab">奥迪</a></li>
+                    <li role="presentation"><a href="#" aria-controls="messages" role="tab" data-toggle="tab">大众</a></li>
+                    <li role="presentation"><a href="#" aria-controls="settings" role="tab" data-toggle="tab">昌河</a></li>
+                    <li role="presentation"><a href="#" aria-controls="setts" role="tab" data-toggle="tab">东风</a></li>
+                    <li role="presentation"><a href="#" aria-controls="settngs" role="tab" data-toggle="tab">一汽</a></li>
+                </ul>
+                <div id="myTabContent" class="tab-content">
+                    <div class="row" id="box">
+                    </div>
+                </div>
+            </div>
+          </div>
+    </div>
+</div>
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">客户租车</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    选择客户:
+                    <input type="text" class="form-control" list="itemlist" id="kehu">
+                    <datalist id="itemlist">
+                    </datalist>
+                </p>
+                <p>
+                    输入天数：
+                    <input type="text" placeholder="你想租几天" class="form-control" id="tian">
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="tijiaoBtn">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+</body>
+<script type="text/template" id="carmoban">
+    <div class="hezi col-xs-12">
+
+        <span class="sp1">{%=name%}</span>
+        <span class="sp2">￥{%=money%}</span>
+        <span class="sp3">/日</span>
+        <a class="a1" href="#" data-name="{%=name%}" data-toggle="modal" data-target="#myModal">租车</a>
+    </div>
+</script>
+<script type="text/javascript" src="/public/js/jquery-1.12.3.min.js"></script>
+<script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+<script type="text/javascript" src="/public/js/underscore-min.js"></script>
+<script>
+    var template = $("#carmoban").html();
+    var complied = _.template(template);
+    $.get("/admin/getzhidingcar?chexi=捷豹",function (data) {
+        _.each(data.results,function (dic) {
+            var $dom =  $(complied(dic));
+            console.log($dom)
+            if(dic.sheizuta.length==1){
+                $dom[0].innerHTML="<div class='dask disabled'>已租出</div>"+$dom[0].innerHTML;
+            }
+            $dom.appendTo("#box");
+        })
+    });
+    $("#qubuche li a").click(function () {
+        $("#box").empty();
+        $.get("/admin/getzhidingcar?chexi="+this.text,function (data) {
+            // console.log(data);
+            _.each(data.results,function (dic) {
+                var $dom =  $(complied(dic));
+                console.log($dom);
+                if(dic.sheizuta.length==1){
+                    $dom[0].innerHTML="<div class='disabled dask'>已租出</div>"+$dom[0].innerHTML;
+                }
+                $dom.appendTo("#box");
+            })
+        })
+    });
+    $.get("/admin/allkh",function (data) {
+        _.each(data.results,function (i) {
+            // console.log(i.name);
+            $("<option>"+i.name+"</option>").appendTo("#itemlist")
+            // $("#itemlist").append("<opaction>"+i.name+"</opaction>");
+        })
+    });
+    $(document).on("click", ".a1", function(){
+        var str="";
+        str=$(this).attr("data-name");
+        $("#tijiaoBtn").click(function () {
+            //这个JSON会直接进入数据库，所以体会到了NoSQL的好处，程序是JSON，持久也是JSON，不变形！
+            $.post("/admin/zuche", {
+                "carname":str,
+                "kehu": $("#kehu").val(),
+                "day": $("#tian").val(),
+            }, function (data) {
+                console.log(data);
+                if(data.jieguo==1){
+                    alert("租车成功");
+                    window.location.reload();
+                }else if(data.jieguo==2){
+                    alert("你已经租过车，一个人只能租一辆哦！！！")
+                }
+                $("#myModal").modal("hide");
+                // refresh();
+            });
+        });
+    });
+</script>
+</html>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>管理员面板</title>
+    <link href="/public/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/public/css/dashboard.css" rel="stylesheet">
+    <!--jQuery dependencies-->
+    <link rel="stylesheet" href="/public/css/jquery-ui.css"/>
+    <link rel="stylesheet" href="/public/css/pqgrid.min.css"/>
+    <link rel="stylesheet" href="/public/themes/office/pqgrid.css"/>
+    <style>
+        .main .page-header {
+            margin-top: 0;
+            color: white;
+        }
+        .ui-widget.ui-widget-content {
+            border: 1px solid #c5c5c5;
+            box-shadow: 10px 10px 18px;
+        }
+        @media (min-width: 768px){
+            .sidebar {
+                position: fixed;
+                top: 51px;
+                bottom: 0;
+                left: 0;
+                z-index: 1000;
+                display: block;
+                padding: 20px;
+                overflow-x: hidden;
+                overflow-y: auto;
+                background-color: rgb(0,0,0,0.5);
+                /* border-right: 1px solid #eee; */
+            }
+        }
+        a {
+            color: white;
+            text-decoration: none;
+        }
+        body{
+            background: url(/public/images/car.jpg);
+            background-size: cover;
+        }
+    </style>
+</head>
+
+<body>
+
+<nav class="navbar navbar-inverse navbar-fixed-top" role="navigation">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+                <span class="sr-only">Toggle navigation</span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="navbar-brand" href="#">汽车租赁系统</a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+            <ul class="nav navbar-nav navbar-right">
+                <li><a href="/">退出登录</a></li>
+            </ul>
+
+        </div>
+    </div>
+</nav>
+
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-sm-3 col-md-2 sidebar">
+            <ul class="nav nav-sidebar">
+                <li class="active"><a href="/admin/">客户信息</a></li>
+                <li><a href="/admin/allqiche/">汽车类型</a></li>
+                <li><a href="/admin/ghlb/">归还登记</a></li>
+                <li><a href="/admin/tongji/">统计分析</a></li>
+                <li><a href="/admin/todosome/">添加数据</a></li>
+            </ul>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 col-md-10 col-md-offset-2 main">
+            <h1 class="page-header">欢迎来到首页！</h1>
+            <input type="text" value="添加客户" class="btn btn-info btn-lg" data-toggle="modal" data-target="#myModal">
+            <h3 style="color: white">全部客户</h3>
+            <section class="grid" style="width:1000px;">
+                <div id="grid" style="margin-top:20px;"></div>
+                <input type="button" value="删除所选" id="shanchubtn" class="btn btn-danger" style="float:right;" />
+            </section>
+
+        </div>‘
+    </div>
+</div>
+
+
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal"><span aria-hidden="true">&times;</span><span
+                        class="sr-only">Close</span></button>
+                <h4 class="modal-title" id="myModalLabel">添加课程</h4>
+            </div>
+            <div class="modal-body">
+                <p>
+                    客户姓名:
+                    <input class="form-control" type="text" id="xuhaoTxt"/>
+                </p>
+                <p>
+                    客户电话:
+                    <input class="form-control" type="text" id="tel"/>
+                </p>
+                <p>
+                    客户住址:
+                    <input type="text" class="form-control" id="address">
+                </p>
+                <p>
+                    客户身份证:
+                    <input class="form-control" type="text" id="id-card"/>
+                </p>
+                <p>
+                    客户驾驶证:
+                    <input type="text" class="form-control" id="car">
+                </p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">关闭</button>
+                <button type="button" class="btn btn-primary" id="tijiaoBtn">提交</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+</body>
+<script type="text/javascript" src="/public/js/jquery-1.12.3.min.js"></script>
+<script type="text/javascript" src="/public/js/bootstrap.min.js"></script>
+<script src="/public/js/jquery-ui.min.js"></script>
+<script src="/public/js/pqgrid.min.js"></script>
+<script type="text/javascript" src="/public/js/underscore-min.js"></script>
+<script>
+    $("#tijiaoBtn").click(function () {
+        $.post("/admin/addkh", {
+            "name": $("#xuhaoTxt").val(),
+            "phone": $("#tel").val(),
+            "address": $("#address").val(),
+            "card": $("#id-card").val(),
+            "car": $("#car").val()
+        }, function (data) {
+            alert(data);
+            window.location.reload();
+            $("#myModal").modal("hide");
+            refresh();
+        });
+    });
+    $("#shanchubtn").click(function(){
+        var amount = $("tr.pq-row-select").length / 2;
+        var boolean = confirm("确认要删除" + amount + "条目么？");
+
+        if(!boolean){
+            return;
+        }
+        var needToDelete = [];
+        $("tr.pq-row-select").each(function(){
+            needToDelete.push($(this).find("td[pq-col-indx=0]").html());
+        });
+        needToDelete = _.uniq(needToDelete);
+        $.post("/admin/deletekh",{
+            needToDelete : JSON.stringify(needToDelete)
+        },function(data){
+            if(data == -1){
+                alert("删除错误！服务器故障，请联系18883248234");
+            }else{
+                alert("成功删除" + data + "条");
+                $("tr.pq-row-select").slideUp();
+            }
+        });
+    });
+
+</script>
+<script type="text/javascript">
+    refresh();
+    function refresh() {
+        $.get("/admin/allkh",{z:Math.random()}, function (data) {
+            var dataobj = data.results;
+            $("#grid").pqGrid({
+                width: 900,
+                height: 400,
+                title: "所有客户",
+                resizable: false,
+                draggable: false,
+                dataModel: {
+                    data: dataobj
+                },
+                pageModel: { type: "local", rPP: 4, strRpp: "{0}", strDisplay: "{0} to {1} of {2}" },
+                colModel: [
+                    {title: "姓名", width: 100, dataType: "string", dataIndx: "name",editable:false},
+                    {title: "电话", width: 150, dataType: "string", dataIndx: "phone"},
+                    {title: "住址", width: 180, dataType: "string", dataIndx: "address"},
+                    {title: "客户身份证", width: 200, dataType: "string", dataIndx: "card"},
+                    {title: "客户驾驶证", width: 200, dataType: "string", dataIndx: "car"},
+                    { title: "", dataIndx: "state", width: 30, minWidth:30, align: "center", type:'checkBoxSelection', cls: 'ui-state-default', resizable: false, sortable:false }
+                ],
+                cellSave: function (event, ui) {
+                    console.log(ui);
+                    $.post("/admin/changekh", ui.rowData, function (data) {
+
+                    });
+                }
+            });
+        });
+    }
+</script>
+</html>
